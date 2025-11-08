@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start server.js -i max -f",
+     "start": "pm2 start server.js -i max -f  --name 'workmore_backend'",
     "kill": "pm2 kill",
     "logs": "pm2 log",
     "restart": "pm2 restart all",
