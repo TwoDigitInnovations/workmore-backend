@@ -16,7 +16,7 @@ const generateUniqueId = require("generate-unique-id");
 const { notify } = require("../services/notification");
 
 module.exports = {
-  // login controller
+
   login: (req, res) => {
     console.log("request came here");
     passport.authenticate("local", async (err, user, info) => {
@@ -55,13 +55,7 @@ module.exports = {
       let user2 = await User.findOne({
         email: payload.email.toLowerCase(),
       });
-      const user = await User.findOne({ number: payload.number });
-      if (user) {
-        return res.status(404).json({
-          success: false,
-          message: "Phone number already exists.",
-        });
-      }
+
       if (user2) {
         return res.status(404).json({
           success: false,
@@ -125,6 +119,7 @@ module.exports = {
       return response.error(res, error);
     }
   },
+
   updateUser: async (req, res) => {
     try {
       delete req.body.password;
@@ -134,6 +129,7 @@ module.exports = {
       return response.error(res, error);
     }
   },
+
   sendOTP: async (req, res) => {
     try {
       const email = req.body.email;
@@ -224,7 +220,6 @@ module.exports = {
     try {
       const cond = { type: req.body.type };
 
-      // Check if page & limit are provided
       const page = parseInt(req.query.page);
       const limit = parseInt(req.query.limit);
 
@@ -1109,5 +1104,101 @@ module.exports = {
       console.error(err);
       res.status(500).json({ error: "Failed to convert image to base64" });
     }
-  }
+  },
+
+
+  getAllAddress: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      return response.ok(res, { addresses: user.addresses });
+    } catch (error) {
+      return response.error(res, error)
+    }
+  },
+
+  addAddress: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      const newAddress = req.body;
+
+      if (user.addresses.length === 0) {
+        newAddress.isDefault = true;
+      }
+
+      user.addresses.push(newAddress);
+      await user.save();
+      return response.ok(res, { message: "Address added successfully", addresses: user.addresses });
+    } catch (error) {
+      return response.error(res, error)
+    }
+  },
+
+  setDefaultAddress: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) return response.notFound(res, "User not found");
+
+      user.addresses.forEach((addr) => {
+        addr.isDefault = false;
+      });
+
+      const selectedAddress = user.addresses.find(
+        (addr) => addr._id.toString() === req.params.id
+      );
+
+      if (!selectedAddress)
+        return response.notFound(res, "Address not found");
+
+      selectedAddress.isDefault = true;
+
+      await user.save();
+      return response.ok(res, { message: "Default address updated", addresses: user.addresses });
+    } catch (error) {
+      return response.error(res, error)
+    }
+  },
+  deleteAddress: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      user.addresses.id(req.params.id).deleteOne();
+      await user.save();
+      return response.ok(res, { message: "Address deleted", addresses: user.addresses });
+    } catch (error) {
+      return response.error(res, error)
+    }
+  },
+  updateAddress: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      const { id } = req.params;
+      const updatedData = req.body;
+
+      if (!user) {
+        return response.notFound(res, "User not found");
+      }
+
+      const addressIndex = user.addresses.findIndex(
+        (addr) => addr._id.toString() === id
+      );
+
+      if (addressIndex === -1) {
+        return response.notFound(res, "Address not found");
+      }
+
+      user.addresses[addressIndex] = {
+        ...user.addresses[addressIndex]._doc,
+        ...updatedData,
+      };
+
+      await user.save();
+
+      return response.ok(res, {
+        message: "Address updated successfully",
+        addresses: user.addresses,
+      });
+    } catch (error) {
+      return response.error(res, error);
+    }
+  },
+
 }

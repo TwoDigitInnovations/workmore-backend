@@ -20,20 +20,11 @@ const productchema = new mongoose.Schema(
     manufacturername: {
       type: String,
     },
-    manufactureradd: {
-      type: String,
-    },
-    expirydate: {
-      type: Date,
-    },
-    isShipmentAvailable: {
-      type: Boolean,
-    },
     name: {
       type: String,
     },
-    vietnamiesName: {
-      type: String,
+    image: {
+      type: [String],
     },
     relatedName: {
       type: [],
@@ -53,21 +44,9 @@ const productchema = new mongoose.Schema(
     metadescription: {
       type: String,
     },
-    BarCode: {
-      type: Number,
-    },
-    Deliverytip: {
-      type: Number,
-    },
-    short_description: {
+
+    description: {
       type: String,
-    },
-    long_description: {
-      type: String,
-    },
-   
-    isReturnAvailable: {
-      type: Boolean,
     },
     pieces: {
       type: Number,
@@ -76,30 +55,14 @@ const productchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    tax: {
-      type: Number,
-    },
     varients: {
       type: [],
     },
-    isShipmentDelivery: {
-      type: Boolean,
-    },
-    isOrderPickup: {
-      type: Boolean,
-    },
-    isLocalDelivery: {
-      type: Boolean,
-    },
-    isDriveUp: {
-      type: Boolean,
-    },
+
     minQuantity: {
       type: Number,
     },
-    parameter_type: {
-      type: String,
-    },
+
     price_slot: [],
 
     status: {
@@ -108,48 +71,10 @@ const productchema = new mongoose.Schema(
       default: "verified",
     },
 
-    Allergens: {
-      type: String,
-    },
     Quantity: {
       type: Number,
     },
-    ReturnPolicy: {
-      type: String,
-    },
-    disclaimer: {
-      type: String,
-    },
-    Warning: {
-      type: String,
-    },
-    isNextDayDeliveryAvailable: {
-      type: Boolean,
-    },
-    isInStoreAvailable: {
-      type: Boolean,
-    },
-    isCurbSidePickupAvailable: {
-      type: Boolean,
-    },
-    tax_code: {
-      type: String,
-    },
-    paymentStatus: {
-      type: String,
-    },
-    customerDetails: {
-      type: String,
-    },
-    from: {
-      type: String,
-    },
-    // attributes: [
-    //     {
-    //         name: { type: String },
-    //         value: { type: String, default: '' }
-    //     }
-    // ]
+
   },
   {
     timestamps: true,

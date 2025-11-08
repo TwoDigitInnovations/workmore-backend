@@ -2,6 +2,7 @@
 
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+
 const pointSchema = new mongoose.Schema({
   type: {
     type: String,
@@ -12,6 +13,15 @@ const pointSchema = new mongoose.Schema({
     type: [Number],
     required: true,
   },
+});
+
+const addressSchema = new mongoose.Schema({
+  label: { type: String, required: true },
+  name: { type: String, required: true }, // e.g. "Home", "Office"
+  phone: { type: String, required: true },
+  address: { type: String, required: true },
+  pincode: { type: String, required: true },
+  isDefault: { type: Boolean, default: false },
 });
 
 const userSchema = new mongoose.Schema(
@@ -37,15 +47,13 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
     },
-    profile:{
-           type: String,
+    profile: {
+      type: String,
     },
     company: {
       type: String,
     },
-    address: {
-      type: String,
-    },
+    addresses: [addressSchema],
     city: {
       type: String,
     },
@@ -77,7 +85,6 @@ const userSchema = new mongoose.Schema(
     national_id: {
       type: String,
     },
-
     dl_number: {
       type: String,
     },
@@ -94,22 +101,6 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     background_check_document: {
-      type: String,
-    },
-    ApartmentNo: {
-      type: String,
-    },
-    SecurityGateCode: {
-      type: String,
-    },
-    zipcode: {
-      type: String,
-    },
-    isBusiness: {
-      type: Boolean,
-      default: false,
-    },
-    BusinessAddress: {
       type: String,
     },
   },
